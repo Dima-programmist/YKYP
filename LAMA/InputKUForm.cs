@@ -318,7 +318,94 @@ namespace РасчетКУ
             FormKUGraph.Show();
         }
 
-        
+        /*//Отображение производителя и марки в combobox в таблицах искл и вкл товаров
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+                if (comboBox1.SelectedIndex > 0)
+                {
+                    showProducerBrand(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["Vendor_id"].Value));
+                    showExInProducts(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["KU_id"].Value));
+                }
+
+        }
+
+        //Включение производителя и марки в combobox в таблицах искл и вкл товаров
+        private void showProducerBrand(Int64 VendorId)
+        {
+            DataGridViewComboBoxColumn combo1 = dataGridView2.Columns["ProducerP"] as DataGridViewComboBoxColumn;
+            DataGridViewComboBoxColumn combo2 = dataGridView2.Columns["BrandP"] as DataGridViewComboBoxColumn;
+            DataGridViewComboBoxColumn combo3 = dataGridView3.Columns["ProducerM"] as DataGridViewComboBoxColumn;
+            DataGridViewComboBoxColumn combo4 = dataGridView3.Columns["BrandM"] as DataGridViewComboBoxColumn;
+            combo1.Items.Clear();
+            combo2.Items.Clear();
+            combo3.Items.Clear();
+            combo4.Items.Clear();
+
+            SqlCommand command = new SqlCommand($"SELECT DISTINCT Producer, Brand_name FROM Products, Assortment Where Products.Product_id = Assortment.Product_id AND Vendor_id = {VendorId} ", _sqlConnection);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                combo1.Items.Add(reader[0]);
+                combo2.Items.Add(reader[1]);
+                combo3.Items.Add(reader[0]);
+                combo4.Items.Add(reader[1]);
+
+            }
+            reader.Close();
+        }
+
+        // Отображение добавленных и исключенных из расчета продуктов
+        private void showExInProducts(Int64 KUId)
+        {
+            dataGridView2.Rows.Clear();
+            dataGridView3.Rows.Clear();
+            SqlCommand command = new SqlCommand($"SELECT * FROM Included_products WHERE KU_id = {KUId}", _sqlConnection);
+
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                dataGridView2.Rows.Add();
+                dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[0].Value = reader[0];
+                dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[1].Value = reader[1];
+                dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[2].Value = reader[2];
+                dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[3].Value = reader[3];
+                dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[4].Value = reader[4];
+                (dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[5] as DataGridViewComboBoxCell).Value = reader[5].ToString();
+                (dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[6] as DataGridViewComboBoxCell).Value = reader[6].ToString();
+
+                // Запрет выбора произв и торг марки для товаров
+                if (dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[2].Value.ToString() == "Товары")
+                {
+                    dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[5].ReadOnly = true;
+                    dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[6].ReadOnly = true;
+                }
+            }
+            reader.Close();
+
+            command = new SqlCommand($"SELECT * FROM Excluded_products WHERE KU_id = {KUId}", _sqlConnection);
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                dataGridView3.Rows.Add();
+                dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[0].Value = reader[0];
+                dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[1].Value = reader[1];
+                dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[2].Value = reader[2];
+                dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[3].Value = reader[3];
+                dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[4].Value = reader[4];
+                (dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[5] as DataGridViewComboBoxCell).Value = reader[5].ToString();
+                (dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[6] as DataGridViewComboBoxCell).Value = reader[6].ToString();
+
+                // Запрет выбора произв и торг марки для товаров
+                if (dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[2].Value.ToString() == "Товары")
+                {
+                    dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[5].ReadOnly = true;
+                    dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[6].ReadOnly = true;
+                }
+            }
+            reader.Close();
+        }*/
+
 
         // Закрытие подключения к БД
         private void InputKUForm_FormClosing(object sender, FormClosingEventArgs e)
