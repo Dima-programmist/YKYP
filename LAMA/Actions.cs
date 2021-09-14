@@ -73,7 +73,7 @@ namespace РасчетКУ
                         command.ExecuteNonQuery();
                     }
                     command = new SqlCommand($"DELETE FROM KU_graph WHERE KU_id = {KU_id}", _sqlConnection);
-                    //MessageBox.Show(command.ExecuteNonQuery().ToString(), "Кол-во удаленных строк");
+                    command.ExecuteNonQuery();
                 }
                 else
                 {
