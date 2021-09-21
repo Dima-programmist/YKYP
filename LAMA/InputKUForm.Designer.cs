@@ -115,7 +115,7 @@ namespace РасчетКУ
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(196, 26);
             this.comboBox1.TabIndex = 2;
-         //   this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -359,6 +359,7 @@ namespace РасчетКУ
             this.dataGridView2.AllowUserToAddRows = false;
             this.dataGridView2.AllowUserToDeleteRows = false;
             this.dataGridView2.AllowUserToResizeRows = false;
+            this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.In_prod_id,
@@ -398,6 +399,7 @@ namespace РасчетКУ
             this.TypeP.Name = "TypeP";
             this.TypeP.ReadOnly = true;
             this.TypeP.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.TypeP.Width = 39;
             // 
             // Attribute1P
             // 
@@ -405,6 +407,7 @@ namespace РасчетКУ
             this.Attribute1P.Name = "Attribute1P";
             this.Attribute1P.ReadOnly = true;
             this.Attribute1P.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Attribute1P.Width = 79;
             // 
             // Attribute2P
             // 
@@ -412,20 +415,21 @@ namespace РасчетКУ
             this.Attribute2P.Name = "Attribute2P";
             this.Attribute2P.ReadOnly = true;
             this.Attribute2P.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Attribute2P.Width = 79;
             // 
             // ProducerP
             // 
             this.ProducerP.HeaderText = "Производитель";
             this.ProducerP.Name = "ProducerP";
             this.ProducerP.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ProducerP.Width = 160;
+            this.ProducerP.Width = 118;
             // 
             // BrandP
             // 
             this.BrandP.HeaderText = "Торговая марка";
             this.BrandP.Name = "BrandP";
             this.BrandP.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.BrandP.Width = 160;
+            this.BrandP.Width = 119;
             // 
             // tabPageToExclude
             // 

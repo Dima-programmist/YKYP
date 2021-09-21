@@ -152,6 +152,7 @@ namespace РасчетКУ
             SqlCon.Close();
         }
 
+        //Отчёт ворд
         private void WordToolStripMenuItem_Click(object sender, EventArgs e)
         { 
             SqlCommand cm = new SqlCommand($"SELECT Name FROM Vendors WHERE Vendor_id = " +
@@ -182,6 +183,7 @@ namespace РасчетКУ
            
         }
 
+        //Отчёт эксель
         private void ExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Excel.Application ObjExcel = new Excel.Application();

@@ -94,6 +94,7 @@ namespace РасчетКУ
                 dateTimePicker2.Enabled = false;
                 status_textBox.Enabled = false;
             }
+            showExInProducts(_KU_id);
         }
 
         // Добавление или изменение данных о КУ
@@ -318,15 +319,25 @@ namespace РасчетКУ
             FormKUGraph.Show();
         }
 
-        /*//Отображение производителя и марки в combobox в таблицах искл и вкл товаров
+        //Отображение производителя и марки в combobox в таблицах искл и вкл товаров
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
-                if (comboBox1.SelectedIndex > 0)
-                {
-                    showProducerBrand(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["Vendor_id"].Value));
-                    showExInProducts(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["KU_id"].Value));
-                }
+
+            if (comboBox1.SelectedIndex > -1)
+            {
+               
+                //SqlCommand command = new SqlCommand($"SELECT Vendor_id FROM Vendors WHERE Vendors.Name = '{comboBox1.SelectedItem}'", _sqlConnection);
+
+               // DataTable dt = new DataTable();
+               // SqlDataAdapter adapt = new SqlDataAdapter(command);
+                //adapt.SelectCommand = command;
+              //  adapt.Fill(dt);
+                //showProducerBrand(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["Vendor_id"].Value));
+                //showExInProducts(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["KU_id"].Value));
+
+                //showProducerBrand(Convert.ToInt64(dt.Rows[0][0]));
+                //showExInProducts(Convert.ToInt64()
+            }
 
         }
 
@@ -404,7 +415,7 @@ namespace РасчетКУ
                 }
             }
             reader.Close();
-        }*/
+        }
 
 
         // Закрытие подключения к БД
