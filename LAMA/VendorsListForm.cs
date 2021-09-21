@@ -62,22 +62,22 @@ namespace РасчетКУ
         // Вывод списка поставщиков
         private void showVendorsList()
         {
-            SqlCommand command = new SqlCommand("SELECT * FROM Vendors", _sqlConnection);
+            SqlCommand command = new SqlCommand("SELECT Vendor_id, Name As 'Поставщик', (SELECT Name FROM Entities Where Entities.Entity_id = Vendors.Entity_id)" +
+                " As 'Юридическое лицо' FROM Vendors", _sqlConnection);
             DataTable dt = new DataTable();
             SqlDataAdapter adapt = new SqlDataAdapter();
             adapt.SelectCommand = command;
             adapt.Fill(dt);
-            dataGridView1.DataSource = dt;
+            advancedDataGridView1.DataSource = dt;
+            advancedDataGridView1.Columns["Vendor_id"].Visible = false;
         }
 
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        
+        private void advancedDataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            using (DataGridViewRow row = dataGridView1.Rows[e.RowIndex])
-            {
-                textBox1.Text = row.Cells["Vendor_id"].Value.ToString();
-                textBox2.Text = row.Cells["Name"].Value.ToString();
-
-            }
+            DataGridViewRow row = advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index];
+            textBox1.Text = row.Cells[1].Value.ToString();
+            textBox2.Text = row.Cells[2].Value.ToString();
         }
 
         // Открытие формы ввода коммерческих условий
