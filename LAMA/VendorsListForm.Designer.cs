@@ -245,6 +245,7 @@ namespace РасчетКУ
             this.button3.TabIndex = 14;
             this.button3.Text = "Удалить";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // VendorsListForm
             // 

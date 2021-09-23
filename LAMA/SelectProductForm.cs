@@ -12,7 +12,6 @@ namespace РасчетКУ
         private SqlConnection _sqlConnection;
         private Int64 VendorId;
         private List<Int64> ProdId;
-        private Global_parameters gp = new Global_parameters();
 
         public SelectProductForm()
         {
@@ -29,7 +28,7 @@ namespace РасчетКУ
         // Подключение к БД, Вывод ассортимента поставщика
         private void SelectForm_Load(object sender, EventArgs e)
         {
-            _sqlConnection = new SqlConnection(gp.getString());
+            _sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
             _sqlConnection.Open();
 
             // Отображение имени поставщика в шапке

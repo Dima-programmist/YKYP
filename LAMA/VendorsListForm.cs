@@ -9,7 +9,6 @@ namespace РасчетКУ
     public partial class VendorsListForm : Form
     {
         private SqlConnection _sqlConnection;
-        private Global_parameters gp = new Global_parameters();
         public VendorsListForm()
         {
             InitializeComponent();
@@ -18,7 +17,7 @@ namespace РасчетКУ
         // Ооткрытие соединения с БД
         private void VendorsListForm_Load(object sender, EventArgs e)
         {
-            _sqlConnection = new SqlConnection(gp.getString());
+            _sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
             _sqlConnection.Open();
 
             showVendorsList();
@@ -31,7 +30,8 @@ namespace РасчетКУ
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SqlCommand command = new SqlCommand($"INSERT INTO [Vendors] (Name) VALUES (N'{textBox2.Text}')", _sqlConnection);
+            return;
+            SqlCommand command = new SqlCommand($"INSERT INTO Vendors (Name, Entity_id) VALUES ('{textBox1.Text}'))", _sqlConnection);
             command.ExecuteNonQuery();
             textBox1.Clear();
             textBox2.Clear();
@@ -39,9 +39,32 @@ namespace РасчетКУ
             showVendorsList();
         }
 
+        // Изменение данных о поставщике
         private void button2_Click(object sender, EventArgs e)
         {
-            SqlCommand command = new SqlCommand("UPDATE Vendors SET Name = '" + textBox2.Text+ "'WHERE Vendor_id = '" + textBox1.Text+"'", _sqlConnection);
+            return;
+            SqlCommand command = new SqlCommand($"SELECT Entity_id FROM Entities WHERE Name = '{textBox2.Text}'");
+            SqlDataReader reader = command.ExecuteReader();
+            int entity_id;
+
+            // Если такое юр. лицо уже найдено
+            if (reader.HasRows)
+            {
+                DialogResult result = MessageBox.Show("Введенное юридическое лицо найдено в базе данных.\n\nИспользовать имеющееся данные?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if(result == DialogResult.Yes)
+                {
+                    reader.Read();
+                    entity_id = Convert.ToInt32(reader[0]);
+                }
+                else
+                {
+
+                }
+                
+
+            }
+
+            command = new SqlCommand("UPDATE Vendors SET Name = '" + textBox2.Text+ "',  WHERE Vendor_id = '" + textBox1.Text+"'", _sqlConnection);
             command.ExecuteNonQuery();
             textBox1.Clear();
             textBox2.Clear();
@@ -49,9 +72,11 @@ namespace РасчетКУ
             showVendorsList();
         }
 
+        // Удаление строки
         private void button3_Click(object sender, EventArgs e)
         {
-            SqlCommand command = new SqlCommand("DELETE FROM Vendors WHERE Vendor_id = '" + textBox1.Text + "' AND Name = '" + textBox2.Text + "'", _sqlConnection);
+            SqlCommand command = new SqlCommand("DELETE FROM Vendors WHERE Vendor_id = " + 
+                advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["Vendor_id"], _sqlConnection);
             command.ExecuteNonQuery();
             textBox1.Clear();
             textBox2.Clear();

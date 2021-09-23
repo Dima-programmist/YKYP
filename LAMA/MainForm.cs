@@ -8,7 +8,6 @@ namespace РасчетКУ
 {
     public partial class MainForm : Form
     {
-        private Global_parameters gp = new Global_parameters();
         public MainForm()
         {
             InitializeComponent();
@@ -50,7 +49,7 @@ namespace РасчетКУ
         // Обновление данных в БД из ПБД
         private void RefreshButton_Click(object sender, EventArgs e)
         {
-            SqlConnection sqlcon = new SqlConnection(gp.getString());
+            SqlConnection sqlcon = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
             sqlcon.Open();
             SqlCommand command = new SqlCommand("EXEC MergeDataBases;", sqlcon);
             

@@ -12,7 +12,6 @@ namespace РасчетКУ
         private SqlConnection _sqlConnection;
         private List<Int64> ProdIds = new List<Int64>();
         private List<string> CategoryID = new List<string>();
-        private Global_parameters gp = new Global_parameters();
         public KUListForm()
         {
             InitializeComponent();
@@ -21,7 +20,7 @@ namespace РасчетКУ
         // Подключение к БД
         private void KUListForm_Load(object sender, EventArgs e)
         {
-            _sqlConnection = new SqlConnection(gp.getString());
+            _sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
             _sqlConnection.Open();
 
             showKUList();

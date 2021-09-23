@@ -13,7 +13,6 @@ namespace РасчетКУ
         private SqlConnection SqlCon;
         public string VendorName;
         public string EntitiesName;
-        private Global_parameters gp = new Global_parameters();
 
         public KUGraphForm()
         {
@@ -22,7 +21,7 @@ namespace РасчетКУ
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            SqlCon = new SqlConnection(gp.getString());
+            SqlCon = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
             SqlCon.Open();
 
             ShowGraph();

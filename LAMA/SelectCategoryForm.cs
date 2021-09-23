@@ -11,7 +11,6 @@ namespace РасчетКУ
     {
         private SqlConnection _sqlConnection;
         private List<string> _CategoryId;
-        private Global_parameters gp = new Global_parameters();
         public SelectCategoryForm()
         {
             InitializeComponent();
@@ -28,7 +27,7 @@ namespace РасчетКУ
         {
             //treeViewCategory.CheckBoxes = true;
 
-            _sqlConnection = new SqlConnection(gp.getString());
+            _sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
 
             _sqlConnection.Open();
 

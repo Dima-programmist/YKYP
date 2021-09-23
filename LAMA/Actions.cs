@@ -12,13 +12,12 @@ namespace РасчетКУ
 {
     class Actions
     {
-        private Global_parameters gp = new Global_parameters();
         private SqlConnection _sqlConnection;
         
         // Создание графиков для всех КУ
         public bool addGraphs()
         {
-            _sqlConnection = new SqlConnection(gp.getString());
+            _sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
             _sqlConnection.Open();
             bool isAdded = false;
 
@@ -40,7 +39,7 @@ namespace РасчетКУ
         // Создание графика для определенного КУ
         public bool addGraphToCurrentKU(Int64 KU_id)
         {
-            _sqlConnection = new SqlConnection(gp.getString());
+            _sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
             _sqlConnection.Open();
 
             // Загрузка переменной сдвига дат
@@ -201,7 +200,7 @@ namespace РасчетКУ
         // Расчет ретро-бонуса конкретной строки графика
         public bool currentRetroCalc(Form graph_form, int rowIndex)
         {
-            _sqlConnection = new SqlConnection(gp.getString());
+            _sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
             bool state = false;
             _sqlConnection.Open();
             DataGridView dgv = graph_form.Controls["dataGridView1"] as DataGridView;

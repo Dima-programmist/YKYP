@@ -12,7 +12,6 @@ namespace РасчетКУ
         private SqlConnection _sqlConnection;
         private bool _showKU = false, _approved = false;
         private Int64 _KU_id;
-        private Global_parameters gp = new Global_parameters();
 
         public InputKUForm()
         {
@@ -36,8 +35,7 @@ namespace РасчетКУ
         // Подключение к БД при открытии формы
         private void InputKUForm_Load(object sender, EventArgs e)
         {
-            _sqlConnection = new SqlConnection(gp.getString());
-
+            _sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DB1"].ConnectionString);
             _sqlConnection.Open();
 
             //Загрузка данных о поставщиках в комбобокс

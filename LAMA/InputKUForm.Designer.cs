@@ -407,7 +407,7 @@ namespace РасчетКУ
             this.Attribute1P.Name = "Attribute1P";
             this.Attribute1P.ReadOnly = true;
             this.Attribute1P.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Attribute1P.Width = 79;
+            this.Attribute1P.Width = 71;
             // 
             // Attribute2P
             // 
@@ -415,7 +415,7 @@ namespace РасчетКУ
             this.Attribute2P.Name = "Attribute2P";
             this.Attribute2P.ReadOnly = true;
             this.Attribute2P.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Attribute2P.Width = 79;
+            this.Attribute2P.Width = 71;
             // 
             // ProducerP
             // 
@@ -429,7 +429,7 @@ namespace РасчетКУ
             this.BrandP.HeaderText = "Торговая марка";
             this.BrandP.Name = "BrandP";
             this.BrandP.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.BrandP.Width = 119;
+            this.BrandP.Width = 107;
             // 
             // tabPageToExclude
             // 
@@ -559,6 +559,7 @@ namespace РасчетКУ
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(238)))), ((int)(((byte)(168)))));
             this.ClientSize = new System.Drawing.Size(957, 622);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
