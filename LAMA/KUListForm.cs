@@ -46,7 +46,7 @@ namespace РасчетКУ
         // Изменение выбранного КУ
         private void button2_Click(object sender, EventArgs e)
         {
-            Form FormInputKu = new InputKUForm(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["KU_id"].Value));
+            Form FormInputKu = new InputKUForm(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["KU_id"].Value), Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["Vendor_id"].Value));
             FormInputKu.ShowDialog();
 
             if(FormInputKu.DialogResult == DialogResult.OK)

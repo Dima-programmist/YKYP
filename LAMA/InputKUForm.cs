@@ -11,17 +11,21 @@ namespace РасчетКУ
     {
         private SqlConnection _sqlConnection;
         private bool _showKU = false, _approved = false;
-        private Int64 _KU_id;
+        private Int64 _KU_id, _Vendor_id;
+        private List<Int64> ProdIds = new List<Int64>();
+        private List<string> CategoryID = new List<string>();
+        //private Int64 _Vendor_id;
 
         public InputKUForm()
         {
             InitializeComponent();
         }
         // Конструктор для изменения выбранного КУ в форме списка КУ
-        public InputKUForm(Int64 KUId)
+        public InputKUForm(Int64 KUId, Int64 VendorId)
         {
             InitializeComponent();
             _KU_id = KUId;
+            _Vendor_id = VendorId;
             _showKU = true;
 
             create_button.Text = "Изменить";
@@ -93,6 +97,7 @@ namespace РасчетКУ
                 status_textBox.Enabled = false;
             }
             showExInProducts(_KU_id);
+            showProducerBrand(_Vendor_id);
         }
 
         // Добавление или изменение данных о КУ
@@ -415,6 +420,178 @@ namespace РасчетКУ
             reader.Close();
         }
 
+        
+        // Кнопка "Добавить все"
+        private void button4_Click(object sender, EventArgs e)
+        {
+            addLine("Все");
+        }
+
+        //Открытие формы выбора категории
+        private void btnSelectCategory_Click(object sender, EventArgs e)
+        {
+            CategoryID.Clear();
+
+            Form selectCategoryForm = new SelectCategoryForm(ref CategoryID);
+            selectCategoryForm.ShowDialog();
+
+            if (selectCategoryForm.DialogResult == DialogResult.OK)
+                addLine("Категория");
+
+        }
+
+        // Открытие формы выбора продуктов
+        private void button5_Click(object sender, EventArgs e)
+        {
+            int selectedKUId = Convert.ToInt32(_KU_id);
+            ProdIds.Clear();
+
+            Form SelectForm = new SelectProductForm(selectedKUId, ref ProdIds);
+            SelectForm.ShowDialog();
+
+            // Добавление строк с товарами 
+            if (SelectForm.DialogResult == DialogResult.OK)
+                addLine("Товары");
+        }
+
+        // Поиск названия категории
+        private string findNameById(string id)
+        {
+            SqlCommand command = new SqlCommand($"SELECT * FROM Classifier WHERE L1 = '{id}' OR L2 = '{id}' OR L3 = '{id}' OR L4 = '{id}'", _sqlConnection);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+
+            for (int i = 0; i <= 6; i += 2)
+            {
+                if (dt.Rows[0][i].ToString() == id)
+                {
+                    return dt.Rows[0][i + 1].ToString();
+                }
+            }
+
+            return "NULL";
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            DialogResult result;
+            SqlCommand command;
+            if (tabControl1.SelectedIndex == 0)
+            {
+                if (dataGridView2.RowCount < 1)
+                {
+                    MessageBox.Show("Нечего удалять", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                result = MessageBox.Show($"Вы уверены, что хотите удалить условие '{dataGridView2.Rows[dataGridView2.CurrentRow.Index].Cells["TypeP"].Value}' ?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.No)
+                    return;
+
+                command = new SqlCommand($"DELETE FROM Included_products WHERE In_prod_id = {dataGridView2.Rows[dataGridView2.CurrentRow.Index].Cells["In_prod_id"].Value}", _sqlConnection);
+            }
+            else
+            {
+                if (dataGridView3.RowCount < 1)
+                {
+                    MessageBox.Show("Нечего удалять", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                result = MessageBox.Show($"Вы уверены, что хотите удалить условие '{dataGridView3.Rows[dataGridView3.CurrentRow.Index].Cells["TypeM"].Value}' ?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.No)
+                    return;
+
+                command = new SqlCommand($"DELETE FROM Excluded_products WHERE Ex_prod_id = {dataGridView3.Rows[dataGridView3.CurrentRow.Index].Cells["Ex_prod_id"].Value}", _sqlConnection);
+            }
+            command.ExecuteNonQuery();
+            showExInProducts(Convert.ToInt64(_KU_id));
+        }
+
+        // Добавление строк в таблицы включения и исключения
+        private void addLine(string type)
+        {
+            Int64 KU_id = Convert.ToInt64(_KU_id);
+            Int16 tabPageId = Convert.ToInt16(tabControl1.SelectedIndex);
+            SqlCommand command;
+            switch (type)
+            {
+                case "Все":
+                    if (tabPageId == 0)
+                    {
+                        for (int i = 0; i < dataGridView2.RowCount; i++)
+                        {
+                            if (dataGridView2.Rows[i].Cells["TypeP"].Value.ToString() == "Все")
+                            {
+                                MessageBox.Show("Данное условие уже добавлено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+                        }
+                        command = new SqlCommand($"INSERT INTO Included_products (KU_id, Type) VALUES ({KU_id}, '{type}')", _sqlConnection);
+                        command.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        DialogResult result = DialogResult.Yes;
+                        // Проверка, есть ли условие "все" в условиях на добавление
+                        for (int i = 0; i < dataGridView2.RowCount; i++)
+                        {
+                            if (dataGridView2.Rows[i].Cells["TypeP"].Value.ToString() == "Все" && dataGridView2.Rows[i].Cells["ProducerP"].Value.ToString() == "" && dataGridView2.Rows[i].Cells["BrandP"].Value.ToString() == "")
+                                result = MessageBox.Show("В условиях на добавление есть условие 'Все', если добавить условие 'Все' для исключения, ни один товар не будет выбран.\nВы уверены, что хотите добавить это условие?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                        }
+                        if (result == DialogResult.Yes)
+                        {
+                            for (int i = 0; i < dataGridView3.RowCount; i++)
+                            {
+                                if (dataGridView3.Rows[i].Cells["TypeM"].Value.ToString() == "Все")
+                                {
+                                    MessageBox.Show("Данное условие уже добавлено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    return;
+                                }
+                            }
+                            command = new SqlCommand($"INSERT INTO Excluded_products (KU_id, Type) VALUES ({KU_id}, '{type}')", _sqlConnection);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    break;
+                case "Категория":
+                    if (tabPageId == 0)
+                    {
+                        command = new SqlCommand($"INSERT INTO Included_products (KU_id, Type, Attribute_1, Attribute_2) VALUES (" +
+                            $"{KU_id}, '{type}', '{CategoryID[0]}', '{findNameById(CategoryID[0])}')", _sqlConnection);
+                    }
+                    else
+                    {
+                        command = new SqlCommand($"INSERT INTO Excluded_products (KU_id, Type, Attribute_1, Attribute_2) VALUES (" +
+                            $"{KU_id}, '{type}', '{CategoryID[0]}', '{findNameById(CategoryID[0])}')", _sqlConnection);
+                    }
+                    command.ExecuteNonQuery();
+
+                    break;
+                case "Товары":
+                    for (int i = 0; i < ProdIds.Count; i++)
+                    {
+                        if (tabPageId == 0)
+                        {
+                            command = new SqlCommand($"INSERT INTO Included_products (KU_id, Type, Attribute_1, Attribute_2) VALUES (" +
+                                $"{KU_id}, '{type}', '{ProdIds[i]}', (SELECT Name FROM Products WHERE Product_id = {ProdIds[i]}))", _sqlConnection);
+                        }
+                        else
+                        {
+                            command = new SqlCommand($"INSERT INTO Excluded_products (KU_id, Type, Attribute_1, Attribute_2) VALUES (" +
+                                $"{KU_id}, '{type}', '{ProdIds[i]}', (SELECT Name FROM Products WHERE Product_id = {ProdIds[i]}))", _sqlConnection);
+                        }
+                        command.ExecuteNonQuery();
+                    }
+
+                    break;
+            }
+            showExInProducts(Convert.ToInt64(_KU_id));
+        }
+        
+        
 
         // Закрытие подключения к БД
         private void InputKUForm_FormClosing(object sender, FormClosingEventArgs e)
