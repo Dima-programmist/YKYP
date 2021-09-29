@@ -396,7 +396,7 @@ namespace РасчетКУ
             return "NULL";
         }
 
-
+        //ПЕРЕНЕСТИ НИЖНИЕ ДВЕ Ф-ИИ 
         // Запись значений из комбобоксов в БД
         private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
