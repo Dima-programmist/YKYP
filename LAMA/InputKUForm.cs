@@ -443,10 +443,11 @@ namespace РасчетКУ
         // Открытие формы выбора продуктов
         private void button5_Click(object sender, EventArgs e)
         {
-            int selectedKUId = Convert.ToInt32(_KU_id);
+            int selectedVendorId = Convert.ToInt32(_Vendor_id);
             ProdIds.Clear();
 
-            Form SelectForm = new SelectProductForm(selectedKUId, ref ProdIds);
+            //нужно поправить: передавать id поставщика и везде заменить selected vendorid
+            Form SelectForm = new SelectProductForm(selectedVendorId, ref ProdIds);
             SelectForm.ShowDialog();
 
             // Добавление строк с товарами 

@@ -220,7 +220,7 @@ namespace РасчетКУ
             this.действияToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(957, 29);
+            this.menuStrip1.Size = new System.Drawing.Size(975, 29);
             this.menuStrip1.TabIndex = 14;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -524,6 +524,7 @@ namespace РасчетКУ
             this.button7.TabIndex = 25;
             this.button7.Text = "Удалить";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // button6
             // 
@@ -534,6 +535,7 @@ namespace РасчетКУ
             this.button6.TabIndex = 24;
             this.button6.Text = "Добавить категорию";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.btnSelectCategory_Click);
             // 
             // button5
             // 
@@ -544,6 +546,7 @@ namespace РасчетКУ
             this.button5.TabIndex = 23;
             this.button5.Text = "Добавить товар";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
@@ -554,13 +557,14 @@ namespace РасчетКУ
             this.button4.TabIndex = 22;
             this.button4.Text = "Добавить все";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // InputKUForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(238)))), ((int)(((byte)(168)))));
-            this.ClientSize = new System.Drawing.Size(957, 622);
+            this.ClientSize = new System.Drawing.Size(975, 622);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
