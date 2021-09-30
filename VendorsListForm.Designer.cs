@@ -234,6 +234,8 @@ namespace РасчетКУ
             this.advancedDataGridView1.Size = new System.Drawing.Size(482, 309);
             this.advancedDataGridView1.TabIndex = 13;
             this.advancedDataGridView1.TimeFilter = false;
+            this.advancedDataGridView1.SortStringChanged += new System.EventHandler(this.advancedDataGridView1_SortStringChanged);
+            this.advancedDataGridView1.FilterStringChanged += new System.EventHandler(this.advancedDataGridView1_FilterStringChanged);
             this.advancedDataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.advancedDataGridView1_CellClick);
             // 
             // button3
