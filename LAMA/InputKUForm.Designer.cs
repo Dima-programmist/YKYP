@@ -590,6 +590,7 @@ namespace РасчетКУ
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
+            this.KeyPreview = true;
             this.Name = "InputKUForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
