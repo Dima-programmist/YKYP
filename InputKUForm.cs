@@ -45,8 +45,8 @@ namespace РасчетКУ
             //Загрузка данных о поставщиках в комбобокс
             SqlCommand command = new SqlCommand("SELECT Name FROM Vendors", _sqlConnection);
             SqlDataReader reader = command.ExecuteReader();
-            
-            while(reader.Read())
+
+            while (reader.Read())
             {
                 comboBox1.Items.Add(reader[0]);
             }
@@ -60,7 +60,7 @@ namespace РасчетКУ
             dateTimePicker2.CustomFormat = " ";
 
             if (_showKU)
-                
+
                 showSelectedKU();
         }
 
@@ -99,12 +99,12 @@ namespace РасчетКУ
             }
             showProducerBrand(_Vendor_id);
             showExInProducts(_KU_id);
-            }
+        }
 
         // Добавление или изменение данных о КУ
         private void create_button_Click(object sender, EventArgs e)
         {
-            
+
             if (!nullCheck())
                 return;
 
@@ -149,7 +149,7 @@ namespace РасчетКУ
             DialogResult result;
 
             result = MessageBox.Show("Вы уверены, что хотите изменить статус КУ на 'Закрыто' ?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if(result == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 SqlCommand command = new SqlCommand($"UPDATE KU SET Status = 'Закрыто' WHERE KU_id = {_KU_id}", _sqlConnection);
                 command.ExecuteNonQuery();
@@ -186,7 +186,7 @@ namespace РасчетКУ
             }
 
             return true;
-           
+
         }
 
         // Добавление КУ в БД
@@ -225,9 +225,9 @@ namespace РасчетКУ
             command.ExecuteNonQuery();
 
             // Создание условия "Все" для включенных товаров по выбранной КУ
-            command = new SqlCommand($"INSERT INTO Included_products (KU_id, Type) VALUES ((SELECT KU_id FROM KU WHERE Vendor_id = (SELECT Vendor_id FROM Vendors WHERE Name = " +
-                $"'{comboBox1.SelectedItem}' AND Date_from = '{dateTimePicker1.Value.ToShortDateString()}')), 'Все')", _sqlConnection);
-            command.ExecuteNonQuery();
+            //command = new SqlCommand($"INSERT INTO Included_products (KU_id, Type) VALUES ((SELECT KU_id FROM KU WHERE Vendor_id = (SELECT Vendor_id FROM Vendors WHERE Name = " +
+            //  $"'{comboBox1.SelectedItem}' AND Date_from = '{dateTimePicker1.Value.ToShortDateString()}')), 'Все')", _sqlConnection);
+            //command.ExecuteNonQuery();
 
             comboBox1.SelectedIndex = -1;
             comboBox2.SelectedIndex = -1;
@@ -294,7 +294,7 @@ namespace РасчетКУ
         private void textBox_KeyPress_only_float_numbers(object sender, KeyPressEventArgs e) // Ограничение на ввод только дробных чисел
         {
             char number = e.KeyChar;
-            
+
             if (!Char.IsDigit(number) && number != 8 && number != 44) //разрешение ввода чисел, запятой и backspace
             {
                 e.Handled = true;
@@ -339,18 +339,16 @@ namespace РасчетКУ
 
             if (comboBox1.SelectedIndex > -1)
             {
-               
-               // SqlCommand command = new SqlCommand($"SELECT Vendor_id FROM Vendors WHERE Vendors.Name = '{comboBox1.SelectedItem}'", _sqlConnection);
+                //Вызываю метод отображения Производителя и марки
+                SqlCommand command = new SqlCommand($"SELECT Vendor_id FROM Vendors WHERE Vendors.Name = '{comboBox1.SelectedItem}'", _sqlConnection);
+                Int64 VendorId = Convert.ToInt64(command.ExecuteScalar());
+                showProducerBrand(VendorId);
 
-               // DataTable dt = new DataTable();
-               // SqlDataAdapter adapt = new SqlDataAdapter(command);
-                //adapt.SelectCommand = command;
-              //  adapt.Fill(dt);
-                //showProducerBrand(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["Vendor_id"].Value));
-                //showExInProducts(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["KU_id"].Value));
+                //Добавление условия "Все" при создании ку
+                dataGridView2.Rows.Clear();
+                dataGridView2.Rows.Add();
+                dataGridView2.Rows[0].Cells["TypeP"].Value = "Все";
 
-                //showProducerBrand(Convert.ToInt64(dt.Rows[0][0]));
-                //showExInProducts(Convert.ToInt64()
             }
 
         }
@@ -431,7 +429,7 @@ namespace РасчетКУ
             reader.Close();
         }
 
-        
+
         // Кнопка "Добавить все"
         private void button4_Click(object sender, EventArgs e)
         {
@@ -457,7 +455,6 @@ namespace РасчетКУ
             int selectedVendorId = Convert.ToInt32(_Vendor_id);
             ProdIds.Clear();
 
-            //нужно поправить: передавать id поставщика и везде заменить selected vendorid
             Form SelectForm = new SelectProductForm(selectedVendorId, ref ProdIds);
             SelectForm.ShowDialog();
 
@@ -502,7 +499,8 @@ namespace РасчетКУ
                 if (result == DialogResult.No)
                     return;
 
-                command = new SqlCommand($"DELETE FROM Included_products WHERE In_prod_id = {dataGridView2.Rows[dataGridView2.CurrentRow.Index].Cells["In_prod_id"].Value}", _sqlConnection);
+                dataGridView2.Rows.RemoveAt(dataGridView2.CurrentRow.Index);
+                //command = new SqlCommand($"DELETE FROM Included_products WHERE In_prod_id = {dataGridView2.Rows[dataGridView2.CurrentRow.Index].Cells["In_prod_id"].Value}", _sqlConnection);
             }
             else
             {
@@ -516,10 +514,11 @@ namespace РасчетКУ
                 if (result == DialogResult.No)
                     return;
 
-                command = new SqlCommand($"DELETE FROM Excluded_products WHERE Ex_prod_id = {dataGridView3.Rows[dataGridView3.CurrentRow.Index].Cells["Ex_prod_id"].Value}", _sqlConnection);
+                dataGridView2.Rows.RemoveAt(dataGridView2.CurrentRow.Index);
+                // command = new SqlCommand($"DELETE FROM Excluded_products WHERE Ex_prod_id = {dataGridView3.Rows[dataGridView3.CurrentRow.Index].Cells["Ex_prod_id"].Value}", _sqlConnection);
             }
-            command.ExecuteNonQuery();
-            showExInProducts(Convert.ToInt64(_KU_id));
+            //command.ExecuteNonQuery();
+            //showExInProducts(Convert.ToInt64(_KU_id));
         }
 
         // Добавление строк в таблицы включения и исключения
@@ -633,8 +632,8 @@ namespace РасчетКУ
             command.ExecuteNonQuery();
         }
 
-      
-        
+
+
         // Удаление данных из комбобоксов в таблицах
         private void InputKUForm_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -664,7 +663,7 @@ namespace РасчетКУ
                     {
                         (dgv.Rows[dgv.CurrentRow.Index].Cells[dgv.CurrentCell.ColumnIndex] as DataGridViewComboBoxCell).Value = "";
 
-                        // удаление из БД
+                        /*/ удаление из БД
                         if (dgv.CurrentCell.ColumnIndex == dgv.ColumnCount - 2)
                         {
                             command = new SqlCommand($"UPDATE {table} SET Producer = NULL WHERE {column} = {dgv.Rows[dgv.CurrentRow.Index].Cells[column].Value}", _sqlConnection);
@@ -675,7 +674,7 @@ namespace РасчетКУ
                             command = new SqlCommand($"UPDATE {table} SET Brand_name = NULL WHERE {column} = {dgv.Rows[dgv.CurrentRow.Index].Cells[column].Value}", _sqlConnection);
                             command.ExecuteNonQuery();
                         }
-
+                        */
                     }
 
                 }
@@ -694,6 +693,6 @@ namespace РасчетКУ
             _sqlConnection.Close();
         }
 
-        
+
     }
 }
