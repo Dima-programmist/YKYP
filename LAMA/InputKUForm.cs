@@ -322,6 +322,8 @@ namespace РасчетКУ
             FormKUGraph.Show();
         }
 
+        // ПЕРЕНОС
+
         //Отображение производителя и марки в combobox в таблицах искл и вкл товаров
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -474,6 +476,7 @@ namespace РасчетКУ
             return "NULL";
         }
 
+        //кнопка удаления вкл/иск
         private void button7_Click(object sender, EventArgs e)
         {
             DialogResult result;
@@ -591,8 +594,85 @@ namespace РасчетКУ
             }
             showExInProducts(Convert.ToInt64(_KU_id));
         }
-        
-        
+
+        // Запись значений из комбобоксов в БД
+        private void DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView dgv;
+            DataGridViewComboBoxCell combo1, combo2;
+            string table = "", column = "";
+
+            if (tabControl1.SelectedIndex == 0)
+            {
+                dgv = dataGridView2;
+                combo1 = dgv.Rows[dgv.CurrentRow.Index].Cells["ProducerP"] as DataGridViewComboBoxCell;
+                combo2 = dgv.Rows[dgv.CurrentRow.Index].Cells["BrandP"] as DataGridViewComboBoxCell;
+                table = "Included_products";
+                column = "In_prod_id";
+            }
+            else
+            {
+                dgv = dataGridView3;
+                combo1 = dgv.Rows[dgv.CurrentRow.Index].Cells["ProducerM"] as DataGridViewComboBoxCell;
+                combo2 = dgv.Rows[dgv.CurrentRow.Index].Cells["BrandM"] as DataGridViewComboBoxCell;
+                table = "Excluded_products";
+                column = "Ex_prod_id";
+            }
+
+            SqlCommand command = new SqlCommand($"UPDATE {table} SET Producer = '{combo1.Value}', Brand_name = '{combo2.Value}' WHERE " +
+                $"{column} = {dgv.Rows[dgv.CurrentRow.Index].Cells[column].Value}", _sqlConnection);
+            command.ExecuteNonQuery();
+        }
+
+      
+        //не работает
+        // Удаление данных из комбобоксов в таблицах
+        private void InputKUForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            DataGridView dgv;
+            SqlCommand command;
+            string table, column;
+
+            // Отслеживание нажатия на delete и backspace
+            if (e.KeyChar == (char)Keys.Delete || e.KeyChar == (char)Keys.Back)
+            {
+                if (tabControl1.SelectedIndex == 0)
+                {
+                    dgv = dataGridView2;
+                    table = "Included_products";
+                    column = "In_prod_id";
+                }
+                else
+                {
+                    dgv = dataGridView3;
+                    table = "Excluded_products";
+                    column = "Ex_prod_id";
+                }
+
+                if (dgv.Focused)
+                {
+                    if (dgv.RowCount > 0 && dgv.CurrentCell.ColumnIndex > dgv.ColumnCount - 3)
+                    {
+                        (dgv.Rows[dgv.CurrentRow.Index].Cells[dgv.CurrentCell.ColumnIndex] as DataGridViewComboBoxCell).Value = "";
+
+                        // удаление из БД
+                        if (dgv.CurrentCell.ColumnIndex == dgv.ColumnCount - 2)
+                        {
+                            command = new SqlCommand($"UPDATE {table} SET Producer = NULL WHERE {column} = {dgv.Rows[dgv.CurrentRow.Index].Cells[column].Value}", _sqlConnection);
+                            command.ExecuteNonQuery();
+                        }
+                        else if (dgv.CurrentCell.ColumnIndex == dgv.ColumnCount - 1)
+                        {
+                            command = new SqlCommand($"UPDATE {table} SET Brand_name = NULL WHERE {column} = {dgv.Rows[dgv.CurrentRow.Index].Cells[column].Value}", _sqlConnection);
+                            command.ExecuteNonQuery();
+                        }
+
+                    }
+
+                }
+            }
+        }
+
 
         // Закрытие подключения к БД
         private void InputKUForm_FormClosing(object sender, FormClosingEventArgs e)

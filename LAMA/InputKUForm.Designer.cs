@@ -376,6 +376,7 @@ namespace РасчетКУ
             this.dataGridView2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView2.Size = new System.Drawing.Size(840, 253);
             this.dataGridView2.TabIndex = 0;
+            this.dataGridView2.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellEndEdit);
             // 
             // In_prod_id
             // 
@@ -463,6 +464,7 @@ namespace РасчетКУ
             this.dataGridView3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView3.Size = new System.Drawing.Size(840, 253);
             this.dataGridView3.TabIndex = 0;
+            this.dataGridView3.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellEndEdit);
             // 
             // Ex_prod_id
             // 
@@ -594,6 +596,7 @@ namespace РасчетКУ
             this.Text = "Ввести коммерческое условие";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InputKUForm_FormClosing);
             this.Load += new System.EventHandler(this.InputKUForm_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.InputKUForm_KeyPress);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
