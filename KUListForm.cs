@@ -87,8 +87,8 @@ namespace РасчетКУ
         {
             if (advancedDataGridView1.RowCount > 0)
             {
-                showProducerBrand(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["Vendor_id"].Value));
                 showExInProducts(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["KU_id"].Value));
+                showProducerBrand(Convert.ToInt64(advancedDataGridView1.Rows[advancedDataGridView1.CurrentRow.Index].Cells["Vendor_id"].Value));
             }
 
         }

@@ -60,6 +60,7 @@ namespace РасчетКУ
             dateTimePicker2.CustomFormat = " ";
 
             if (_showKU)
+                
                 showSelectedKU();
         }
 
@@ -96,14 +97,16 @@ namespace РасчетКУ
                 dateTimePicker2.Enabled = false;
                 status_textBox.Enabled = false;
             }
-            showExInProducts(_KU_id);
             showProducerBrand(_Vendor_id);
-        }
+            showExInProducts(_KU_id);
+            }
 
         // Добавление или изменение данных о КУ
         private void create_button_Click(object sender, EventArgs e)
         {
-            nullCheck();
+            
+            if (!nullCheck())
+                return;
 
             // Добавление или изменение информаци о коммерческих условиях
             if (create_button.Text == "Создать")
@@ -124,7 +127,8 @@ namespace РасчетКУ
             result = MessageBox.Show($"Вы уверены, что хотите {createNapprove_button.Text} выбранное коммерческое условие?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                nullCheck();
+                if (!nullCheck())
+                    return;
 
                 if (createNapprove_button.Text == "Создать и утвердить")
                 {
@@ -162,22 +166,27 @@ namespace РасчетКУ
         }
 
         // Проверка на пустые поля при нажатии на кнопки
-        private void nullCheck()
+        private bool nullCheck()
         {
             // Проверка, выбран ли поставщик + введены ли данные
             if (comboBox1.SelectedIndex == -1)
             {
                 MessageBox.Show("Поставщик не выбран!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
-            else if ((textBox1.Text == "") || (comboBox2.SelectedIndex == -1))
+            if ((textBox1.Text == "") || (comboBox2.SelectedIndex == -1))
             {
                 MessageBox.Show("Введите данные!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
-            //
-            // Добавить проверку на пустые datetimepicker'ы
-            //
+            if ((dateTimePicker1.Format == DateTimePickerFormat.Custom) || (dateTimePicker2.Format == DateTimePickerFormat.Custom))
+            {
+                MessageBox.Show("Введите даты!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
+           
         }
 
         // Добавление КУ в БД
@@ -331,7 +340,7 @@ namespace РасчетКУ
             if (comboBox1.SelectedIndex > -1)
             {
                
-                //SqlCommand command = new SqlCommand($"SELECT Vendor_id FROM Vendors WHERE Vendors.Name = '{comboBox1.SelectedItem}'", _sqlConnection);
+               // SqlCommand command = new SqlCommand($"SELECT Vendor_id FROM Vendors WHERE Vendors.Name = '{comboBox1.SelectedItem}'", _sqlConnection);
 
                // DataTable dt = new DataTable();
                // SqlDataAdapter adapt = new SqlDataAdapter(command);
@@ -625,7 +634,7 @@ namespace РасчетКУ
         }
 
       
-        //не работает
+        
         // Удаление данных из комбобоксов в таблицах
         private void InputKUForm_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -673,6 +682,11 @@ namespace РасчетКУ
             }
         }
 
+        //Метод сохранения в бд
+        private void BdSave(object sender, KeyPressEventArgs e)
+        {
+
+        }
 
         // Закрытие подключения к БД
         private void InputKUForm_FormClosing(object sender, FormClosingEventArgs e)
