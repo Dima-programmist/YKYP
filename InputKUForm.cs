@@ -627,9 +627,16 @@ namespace РасчетКУ
                 column = "Ex_prod_id";
             }
 
-            SqlCommand command = new SqlCommand($"UPDATE {table} SET Producer = '{combo1.Value}', Brand_name = '{combo2.Value}' WHERE " +
-                $"{column} = {dgv.Rows[dgv.CurrentRow.Index].Cells[column].Value}", _sqlConnection);
-            command.ExecuteNonQuery();
+            //
+            //      ЗАЧЕМ И КАК ТУТ ЗАПИСЫВАТЬ В БД, КОГДА КУ ЕЩЕ НЕ СОЗДАНО? 
+            //
+            //                              ||
+            //                              ||
+            //                              \/
+            //
+            //SqlCommand command = new SqlCommand($"UPDATE {table} SET Producer = '{combo1.Value}', Brand_name = '{combo2.Value}' WHERE " +
+            //    $"{column} = {dgv.Rows[dgv.CurrentRow.Index].Cells[column].Value}", _sqlConnection);
+            //command.ExecuteNonQuery();
         }
 
 
